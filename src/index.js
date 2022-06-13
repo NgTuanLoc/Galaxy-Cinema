@@ -12,7 +12,7 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <App tab="home" />
     </Provider>
   </React.StrictMode>
 );
