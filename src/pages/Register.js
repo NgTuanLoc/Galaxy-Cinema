@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import { Logo, FormRow } from '../components';
+import { registerUser, loginUser } from '../features/user/userSlice';
+import axios from 'axios';
 
 const initialState = {
   name: '',
@@ -12,7 +16,10 @@ const initialState = {
 };
 
 const Register = () => {
-  const [values, setValues] = useState('second');
+  const dispatch = useDispatch();
+  const { isLoading, user } = useSelector((store) => store.user);
+  const [values, setValues] = useState(initialState);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -28,11 +35,25 @@ const Register = () => {
       toast.error('Please fill out all fields');
       return;
     }
+
+    if (isMember) {
+      dispatch(loginUser({ email, password }));
+      return;
+    }
+    dispatch(registerUser({ name, email, password }));
   };
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
   };
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    }
+  }, [user, navigate]);
 
   return (
     <Wrapper className="fullpage">
@@ -56,8 +77,8 @@ const Register = () => {
           handleChange={handleChange}
         />
 
-        <button type="submit" className="btn btn-block">
-          submit
+        <button type="submit" className="btn btn-block" disabled={isLoading}>
+          {isLoading ? '...Loading' : 'Submit'}
         </button>
 
         <p>
