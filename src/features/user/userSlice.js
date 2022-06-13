@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
-import customFetch from '../../utils/axios';
 import { addUserToLocalStorage, getUserFromLocalStorage } from '../../utils/localStorageHandler';
+import { registerUserThunk, loginUserThunk } from './userThunk';
 
 const initialState = {
   isLoading: false,
@@ -10,21 +10,11 @@ const initialState = {
 };
 
 export const registerUser = createAsyncThunk('user/registerUser', async (user, thunkAPI) => {
-  try {
-    const response = await customFetch.post('/auth/register', user);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data.msg);
-  }
+  return registerUserThunk('/auth/register', user, thunkAPI);
 });
 
 export const loginUser = createAsyncThunk('user/loginUser', async (user, thunkAPI) => {
-  try {
-    const response = await customFetch.post('/auth/login', user);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data.msg);
-  }
+  return loginUserThunk('/auth/login', user, thunkAPI);
 });
 
 const userSlice = createSlice({

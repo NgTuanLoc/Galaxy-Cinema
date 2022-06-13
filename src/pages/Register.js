@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { Logo, FormRow } from '../components';
 import { registerUser, loginUser } from '../features/user/userSlice';
-import axios from 'axios';
 
 const initialState = {
   name: '',
@@ -51,7 +50,7 @@ const Register = () => {
     if (user) {
       setTimeout(() => {
         navigate('/');
-      }, 2000);
+      }, 1000);
     }
   }, [user, navigate]);
 
