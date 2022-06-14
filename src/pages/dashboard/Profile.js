@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 import { FormRow } from '../../components';
-import styled from 'styled-components';
+import { updateUser } from '../../features/user/userSlice';
 
 const Profile = () => {
   const { user, isLoading } = useSelector((store) => store.user);
@@ -18,12 +19,14 @@ const Profile = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log('Hello');
     const { name, email, lastName, location } = userData;
 
     if (!name || !email || !lastName || !location) {
       toast.error('Please Fill Out All Fields');
       return;
     }
+    dispatch(updateUser(userData));
   };
 
   const handleChange = (event) => {
@@ -52,7 +55,7 @@ const Profile = () => {
             value={userData.location}
             handleChange={handleChange}
           />
-          <button type="button" className="btn btn-block" disabled={isLoading}>
+          <button type="submit" className="btn btn-block" disabled={isLoading}>
             {isLoading ? 'Please Wait ...' : 'Save Changes'}
           </button>
         </div>

@@ -6,7 +6,7 @@ import {
   getUserFromLocalStorage,
   removeUserFromLocalStorage,
 } from '../../utils/localStorageHandler';
-import { registerUserThunk, loginUserThunk } from './userThunk';
+import { registerUserThunk, loginUserThunk, updateUserThunk } from './userThunk';
 
 const initialState = {
   isLoading: false,
@@ -22,6 +22,10 @@ export const loginUser = createAsyncThunk('user/loginUser', async (user, thunkAP
   return loginUserThunk('/auth/login', user, thunkAPI);
 });
 
+export const updateUser = createAsyncThunk('user/updateUser', async (user, thunkAPI) => {
+  return updateUserThunk('/auth/updateUser', user, thunkAPI);
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -32,6 +36,7 @@ const userSlice = createSlice({
     logoutUser: (state) => {
       state.user = null;
       state.isSidebarOpen = false;
+      toast.success('Logout Successfull!');
       removeUserFromLocalStorage();
     },
   },
@@ -61,6 +66,19 @@ const userSlice = createSlice({
       toast.success(`Welcome back ${user.name}`);
     },
     [loginUser.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.error(payload);
+    },
+    [updateUser.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [updateUser.fulfilled]: (state, { payload }) => {
+      state.user = payload;
+      state.isLoading = false;
+      addUserToLocalStorage(state.user);
+      toast.success('User Updated');
+    },
+    [updateUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
       toast.error(payload);
     },
