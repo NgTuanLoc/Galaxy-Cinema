@@ -19,7 +19,6 @@ const Profile = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Hello');
     const { name, email, lastName, location } = userData;
 
     if (!name || !email || !lastName || !location) {
