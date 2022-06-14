@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 import { FormRow, FormRowSelect } from '../../components';
-import { handleChange, clearValue } from '../../features/job/jobSlice';
+import { handleChange, clearValue, createJob } from '../../features/job/jobSlice';
 
 const AddJob = () => {
   const dispatch = useDispatch();
@@ -18,9 +20,23 @@ const AddJob = () => {
     isEditing,
     editJobId,
   } = useSelector((store) => store.job);
+  const { user } = useSelector((store) => store.user);
+
+  useEffect(() => {
+    // eventually will check for isEditing
+    if (!isEditing) {
+      dispatch(handleChange({ name: 'jobLocation', value: user.location }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!position || !company || !jobLocation) {
+      toast.error('Please Fill Out All Fields');
+      return;
+    }
+    dispatch(createJob({ position, company, jobLocation, jobType, status }));
   };
 
   const handleJobInput = (event) => {
@@ -36,6 +52,9 @@ const AddJob = () => {
         <div className="form-center">
           {/* Position */}
           <FormRow type="text" name="position" value={position} handleChange={handleJobInput} />
+
+          {/* Company */}
+          <FormRow type="text" name="company" value={company} handleChange={handleJobInput} />
 
           {/* Location */}
           <FormRow

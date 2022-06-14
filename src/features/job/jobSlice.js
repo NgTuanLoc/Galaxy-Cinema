@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
+import { createJobThunk } from './jobThunk';
+
 const initialState = {
   isLoading: false,
   position: '',
@@ -14,6 +16,10 @@ const initialState = {
   editJobId: '',
 };
 
+export const createJob = createAsyncThunk('job/createJob', async (job, thunkAPI) => {
+  return createJobThunk('/jobs', job, thunkAPI);
+});
+
 const jobSlice = createSlice({
   name: 'job',
   initialState,
@@ -23,6 +29,19 @@ const jobSlice = createSlice({
     },
     clearValue: () => {
       return { ...initialState };
+    },
+  },
+  extraReducers: {
+    [createJob.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [createJob.fulfilled]: (state) => {
+      state.isLoading = false;
+      toast.success('Job Created');
+    },
+    [createJob.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.error(payload);
     },
   },
 });
