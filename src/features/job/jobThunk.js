@@ -5,11 +5,7 @@ import { getAllJobs, hideLoading, showLoading } from '../allJobs/allJobsSlice';
 
 export const createJobThunk = async (url, job, thunkAPI) => {
   try {
-    const response = await customFetch.post(url, job, {
-      headers: {
-        authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-      },
-    });
+    const response = await customFetch.post(url, job);
     thunkAPI.dispatch(clearValue());
     return response.data;
   } catch (error) {
@@ -25,15 +21,21 @@ export const createJobThunk = async (url, job, thunkAPI) => {
 export const deleteJobThunk = async (url, jobId, thunkAPI) => {
   thunkAPI.dispatch(showLoading());
   try {
-    const response = await customFetch.delete(`${url}/${jobId}`, {
-      headers: {
-        authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-      },
-    });
+    const response = await customFetch.delete(`${url}/${jobId}`);
     thunkAPI.dispatch(getAllJobs());
     return response.data.msg;
   } catch (error) {
     thunkAPI.dispatch(hideLoading());
+    return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+};
+
+export const editJobThunk = async (url, { jobId, job }, thunkAPI) => {
+  try {
+    const response = await customFetch.patch(`${url}/${jobId}`, job);
+    thunkAPI.dispatch(clearValue());
+    return response.data;
+  } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 };

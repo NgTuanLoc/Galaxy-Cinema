@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 
 import { FormRow, FormRowSelect } from '../../components';
-import { handleChange, clearValue, createJob } from '../../features/job/jobSlice';
+import { handleChange, clearValue, createJob, editJob } from '../../features/job/jobSlice';
 
 const AddJob = () => {
   const dispatch = useDispatch();
@@ -34,6 +34,15 @@ const AddJob = () => {
     event.preventDefault();
     if (!position || !company || !jobLocation) {
       toast.error('Please Fill Out All Fields');
+      return;
+    }
+    if (isEditing) {
+      dispatch(
+        editJob({
+          jobId: editJobId,
+          job: { position, company, jobLocation, jobType, status },
+        })
+      );
       return;
     }
     dispatch(createJob({ position, company, jobLocation, jobType, status }));
