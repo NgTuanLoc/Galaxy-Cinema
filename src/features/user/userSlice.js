@@ -14,17 +14,11 @@ const initialState = {
   user: getUserFromLocalStorage(),
 };
 
-export const registerUser = createAsyncThunk('user/registerUser', async (user, thunkAPI) => {
-  return registerUserThunk('/auth/register', user, thunkAPI);
-});
+export const registerUser = createAsyncThunk('user/registerUser', registerUserThunk);
 
-export const loginUser = createAsyncThunk('user/loginUser', async (user, thunkAPI) => {
-  return loginUserThunk('/auth/login', user, thunkAPI);
-});
+export const loginUser = createAsyncThunk('user/loginUser', loginUserThunk);
 
-export const updateUser = createAsyncThunk('user/updateUser', async (user, thunkAPI) => {
-  return updateUserThunk('/auth/updateUser', user, thunkAPI);
-});
+export const updateUser = createAsyncThunk('user/updateUser', updateUserThunk);
 
 const userSlice = createSlice({
   name: 'user',

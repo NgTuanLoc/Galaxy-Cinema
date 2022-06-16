@@ -3,9 +3,9 @@ import { logoutUser } from '../user/userSlice';
 import { clearValue } from './jobSlice';
 import { getAllJobs, hideLoading, showLoading } from '../allJobs/allJobsSlice';
 
-export const createJobThunk = async (url, job, thunkAPI) => {
+export const createJobThunk = async (job, thunkAPI) => {
   try {
-    const response = await customFetch.post(url, job);
+    const response = await customFetch.post('/jobs', job);
     thunkAPI.dispatch(clearValue());
     return response.data;
   } catch (error) {
@@ -18,10 +18,10 @@ export const createJobThunk = async (url, job, thunkAPI) => {
   }
 };
 
-export const deleteJobThunk = async (url, jobId, thunkAPI) => {
+export const deleteJobThunk = async (jobId, thunkAPI) => {
   thunkAPI.dispatch(showLoading());
   try {
-    const response = await customFetch.delete(`${url}/${jobId}`);
+    const response = await customFetch.delete(`/jobs/${jobId}`);
     thunkAPI.dispatch(getAllJobs());
     return response.data.msg;
   } catch (error) {
@@ -30,9 +30,9 @@ export const deleteJobThunk = async (url, jobId, thunkAPI) => {
   }
 };
 
-export const editJobThunk = async (url, { jobId, job }, thunkAPI) => {
+export const editJobThunk = async ({ jobId, job }, thunkAPI) => {
   try {
-    const response = await customFetch.patch(`${url}/${jobId}`, job);
+    const response = await customFetch.patch(`/jobs/${jobId}`, job);
     thunkAPI.dispatch(clearValue());
     return response.data;
   } catch (error) {
