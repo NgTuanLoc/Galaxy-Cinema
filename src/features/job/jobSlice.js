@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { getUserFromLocalStorage } from '../../utils/localStorageHandler';
 
 import { createJobThunk } from './jobThunk';
 
@@ -28,7 +29,7 @@ const jobSlice = createSlice({
       state[name] = value;
     },
     clearValue: () => {
-      return { ...initialState };
+      return { ...initialState, jobLocation: getUserFromLocalStorage()?.location || '' };
     },
   },
   extraReducers: {
