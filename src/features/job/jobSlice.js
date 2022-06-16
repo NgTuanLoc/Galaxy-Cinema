@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { getUserFromLocalStorage } from '../../utils/localStorageHandler';
 
-import { createJobThunk } from './jobThunk';
+import { createJobThunk, deleteJobThunk } from './jobThunk';
 
 const initialState = {
   isLoading: false,
@@ -19,6 +19,10 @@ const initialState = {
 
 export const createJob = createAsyncThunk('job/createJob', async (job, thunkAPI) => {
   return createJobThunk('/jobs', job, thunkAPI);
+});
+
+export const deleteJob = createAsyncThunk('allJobs/deleteJob', async (jobId, thunkAPI) => {
+  return deleteJobThunk('/jobs', jobId, thunkAPI);
 });
 
 const jobSlice = createSlice({
@@ -42,6 +46,13 @@ const jobSlice = createSlice({
     },
     [createJob.rejected]: (state, { payload }) => {
       state.isLoading = false;
+      toast.error(payload);
+    },
+    [deleteJob.fulfilled]: (_, { payload }) => {
+      toast.success(payload);
+    },
+    [deleteJob.rejected]: (_, { payload }) => {
+      console.log(payload);
       toast.error(payload);
     },
   },

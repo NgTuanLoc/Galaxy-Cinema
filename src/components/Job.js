@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import moment from 'moment';
 
 import JobInfo from './JobInfo';
+import { deleteJob } from '../features/job/jobSlice';
 
 const Job = ({ _id, position, company, jobLocation, jobType, createdAt, status }) => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const Job = ({ _id, position, company, jobLocation, jobType, createdAt, status }
               type="button"
               className="btn delete-btn"
               onClick={() => {
-                console.log('delete  job');
+                dispatch(deleteJob(_id));
               }}
             >
               Delete
