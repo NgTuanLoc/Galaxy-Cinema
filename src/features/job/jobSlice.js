@@ -53,7 +53,6 @@ const jobSlice = createSlice({
       toast.success(payload);
     },
     [deleteJob.rejected]: (_, { payload }) => {
-      console.log(payload);
       toast.error(payload);
     },
     [editJob.pending]: (state) => {

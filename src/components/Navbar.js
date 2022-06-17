@@ -3,8 +3,9 @@ import { FaAlignLeft, FaUserCircle, FaCaretDown } from 'react-icons/fa';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { toggleSidebar, logoutUser } from '../features/user/userSlice';
+import { toggleSidebar } from '../features/user/userSlice';
 import { Logo } from '../components';
+import { clearStore } from '../features/user/userSlice';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const Navbar = () => {
               type="button"
               className="dropdown-btn"
               onClick={() => {
-                dispatch(logoutUser('Logging out...'));
+                dispatch(clearStore('Logout Successful...'));
               }}
             >
               logout
